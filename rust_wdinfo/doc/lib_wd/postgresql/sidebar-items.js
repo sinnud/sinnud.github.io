@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["url_encode","URL encodein case when your password have symbol out of URL set, like !@ (see src code)"]],"struct":[["PostgreSQL","PostgreSQLConnect to PostgreSQLExecute queries to PostgreSQLimport data into PostgreSQL"]]});
