@@ -63,7 +63,7 @@ under the same folder the executable program located `config/log4rs.yaml`.
   - When the production (released) program is executed from other folder, log folder 
     defined in log4rs.yaml need to manually created with full path
   - log file will be archived using timestamp at the beginning of run.
-- Support command line arguments. See `envargs`.
+- Support command line arguments. See [envargs](../../lib_wd/envargs/index.html).
  */</span>
 <span class="kw">fn</span> <span class="ident">main</span>()<span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>{
     <span class="kw">let</span> <span class="ident">root</span><span class="op">=</span><span class="ident">lib_wd</span>::<span class="ident">file_status</span>::<span class="ident">log_config_path</span>()<span class="question-mark">?</span>;
