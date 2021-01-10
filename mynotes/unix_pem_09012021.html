@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Unix Pem</title>
+    </head>
+    <body>
+        back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+        <ul>
+            <li>ssh-keygen -t rsa -b 2048 -v</li>
+            <li>  input ubuntu_user along with two enter</li>
+            <li>mv ubuntu_user ubuntu_user.pem</li>
+            <li>cp ubuntu_user.pub authorized_keys (if file exists, append to)</li>
+            <li> Get ubuntu_user.pem in your client workstation and run ssh -i ubuntu_user.pem user@ubuntu</li>
+        </ul>
+        See original doc on <a href="https://linuxaws.wordpress.com/2017/07/17/how-to-generate-pem-file-to-ssh-the-server-without-password-in-linux/">web</a>.
+    </body>
+</html>

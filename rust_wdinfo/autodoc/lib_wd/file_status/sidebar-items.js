@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["log_config_path",""],["rename_log_with_timestamp",""]],"struct":[["FileStatus",""]]});
