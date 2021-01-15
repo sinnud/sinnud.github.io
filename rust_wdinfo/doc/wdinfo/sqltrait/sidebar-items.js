@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["url_encode","URL encodein case when your password have symbol out of URL set, like !@ (see src code)"]],"trait":[["SQL","trait SQLfunction definition. implementation will be in postgresql.rs and libmysql.rs (may more later)With default define here.One exception: create_truncate_table just define here since it just call functions defined here."]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["envargs","check command line argumentno argument is default, do all works: data, music, photos, moviecan be arbitrary argument(s) from the above fourIf duplicated, choose oneif other than above four, error outreturn clean string"]]});
