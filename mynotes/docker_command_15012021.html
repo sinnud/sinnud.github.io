@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>docker command 15JAN2021</title>
+    </head>
+    <body>
+        back to <a href="../index.html">Luke Du's ugly page</a>.<p><p><p>
+        From <a href="https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf">PDF sheet.</a><p><p>
+        Show docker images:
+        <ul>
+            <li><pre><code>sudo docker images</code></pre> or <pre><code>sudo docker image ls</code></pre></li>
+        </ul>
+        Show running containers:
+        <ul>
+            <li><pre><code>sudo docker container ls</code></pre> or <pre><code>sudo docker ps</code></pre></li>
+        </ul>
+        Show running/died containers:
+        <ul>
+            <li><pre><code>sudo docker ps</code></pre> or <pre><code>sudo docker ps -aq</code></pre> just show container ID</li>
+        </ul>
+        Kill running/died containers:
+        <ul>
+            <li><pre><code>sudo container rm -f [container ID]</code></pre> 
+                or <pre><code>sudo container rm -f $(ps -aq)</code></pre> kill all of them</li>
+        </ul>
+    </body>
+</html>
