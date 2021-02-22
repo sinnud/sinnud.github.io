@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["db_pem","Giving pem file with pull path, read containt as pem info"]]});
+initSidebarItems({"fn":[["db_pem","Giving pem file with pull path, read containt as pem info"],["web_login_from_csv","Get login information from password file in csv format * password file have format of name,url,username,password * the argument webname need to match with name in password file * "]]});
