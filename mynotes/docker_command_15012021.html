@@ -11,6 +11,34 @@
         <ul>
             <li><pre><code>sudo docker start [CONTAINER NAME]</code></pre> </li>
         </ul>
+        Try webserver in docker.
+        <ul>
+            <li>Create Dockerfile with contains:<pre>
+                <code>From nginx</code>
+            </pre> Then just run command <pre>
+                <code>sudo docker build -t sinnud_www .</code>
+            </pre> to create my own image sinnud_www.
+            </li>
+            <li><pre><code>
+                user@user-VirtualBox:~/docker/nginx$ cat run_nginx.sh 
+#!/bin/bash
+
+export VOLUME='/home/user/sinnud.github.io'
+
+docker run  -d \
+    --name sinnud_www \
+    --publish 1246:80 \
+    --volume ${VOLUME}:/usr/share/nginx/html \
+    nginx
+            </code></pre> </li>
+        </ul>
+        Then we can use web brouwser with URL: http://192.168.1.213:1246/
+        <hr>
+        When container can't be stop because of permission issue, we can restart docker service:
+        <ul>
+            <li><pre><code>sudo systemctl restart docker.service </code></pre></li>
+        </ul>
+        
         <hr>
         Show docker images:
         <ul>
