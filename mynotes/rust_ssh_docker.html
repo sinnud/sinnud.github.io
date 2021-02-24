@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Rust Dicker</title>
+        <title>Rust Docker</title>
     </head><meta charset="utf-8">
     <body>
         back to <a href="../index.html">Luke Du's ugly page</a>.<p>
-        2021年2月24日：
+        2021年2月24日：(February 24, 2021)
         <ul>
-            <li>将docker命令写入无密码sudo中：<code>sudo visudo</code>在编辑器中加入一行<pre>
+            <li>将docker命令写入无密码sudo中：<code>sudo visudo</code>在编辑器中加入一行 
+                (Run <code>sudo visudo</code> to add the line below such that user sinnud can run sudo docker without password)
+                <pre>
                 <code>sinnud ALL=(ALL) NOPASSWD:/bin/docker
                 </code>
             </pre></li>
         </ul>
         <ul>
-            <li>命令：
+            <li>命令：(The following command)
                 <pre>
                     <code>ssh -i .ssh/ubuntu_sinnud.pem sinnud@192.168.1.213 sudo docker exec -it greenplum su - gpadmin /code/scripts/gpinit2.bash
                     </code>
                 </pre>
-                会出错：
+                会出错：(will error out:)
                 <pre>
                     <code>the input device is not a TTY
                     </code>
                 </pre>
-                需要改成：
+                需要改成：(Need to be changed from )<code>-it</code> to <code>-tty</code>
                 <pre>
                     <code>ssh -i .ssh/ubuntu_sinnud.pem sinnud@192.168.1.213 sudo docker exec -tty greenplum su - gpadmin /code/scripts/gpinit2.bash
                     </code>

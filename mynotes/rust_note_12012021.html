@@ -5,9 +5,12 @@
     </head><meta charset="utf-8">
     <body>
         back to <a href="../index.html">Luke Du's ugly page</a>.<p>
-        更新2021年2月17日。<p><p>
-        测试函数的编译执行：cargo test --lib -- --nocapture<p>
+        更新2021年2月17日。(Update on February 17, 2021)<p><p>
+        测试函数的编译执行：(Compile and run test RUST function) cargo test --lib -- --nocapture<p>
         这里nocapture参数将测试函数里的输出显示出来（不做捕获隐藏）。需要多出--应该是程序缺陷。
+        (Here use option --nocapture such that the output of test function will be printed out in standard output.
+         Default setting is, the output of test function will be captured. Here extra -- is bug og cargo I think.)
+        <hr>
         Create new rust project:
         <ul>
             <li>cargo new proj_name</li>
