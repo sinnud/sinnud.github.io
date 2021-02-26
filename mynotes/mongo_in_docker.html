@@ -12,7 +12,7 @@
                 <code>docker pull mongo
                 </code>
             </pre></li>
-            <li>Create run_mongodb.sh and run it:
+            <li>Create run_mongodb.sh and run it (postgresql use port 5432, while mongo use port 27017):
                 <pre>
                     <code>$ cat run_mongpdb.sh 
                         #!/bin/bash
@@ -21,7 +21,7 @@
                         
                         docker run -itd \
                             --name mongodb \
-                            --publish 4514:5432 \
+                            --publish 4514:27017 \
                             --publish 90:22 \
                             --volume ${VOLUME}:/code \
                             mongo
@@ -69,6 +69,23 @@
                 <pre>
                     <code>use sinnud
 db.dropDatabase()
+                    </code>
+                </pre>
+            </li>
+        </ul>
+        <hr>
+        <ul> February 26, 2021.
+            <li>Show collections:
+                <pre>
+                    <code>use db
+show collections
+                    </code>
+                </pre>
+            </li>
+            <li>Show data in collection:
+                <pre>
+                    <code>use db
+db.mycol.find()
                     </code>
                 </pre>
             </li>

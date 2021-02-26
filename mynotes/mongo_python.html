@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Mongo in Docker</title>
+    </head><meta charset="utf-8">
+    <body>
+        back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+        <hr>
+        <ul> February 26, 2021.
+            <li>Use python pymongo module:
+                <pre>
+                    <code>from pymongo import MongoClient
+                    </code>
+                </pre>
+            </li>
+            <li>Connect to mongodb:
+                <pre>
+                    <code>connect = MongoClient("mongodb://192.168.1.213:4514")
+                    </code>
+                </pre>
+            </li>
+            <li>Prepare JSON data (need <code>import json</code>):
+                <pre>
+                    <code>document1 = json.loads(strfromfile)
+                    </code>
+                </pre>
+            </li>
+            <li>Connect to mongodb:
+                <pre>
+                    <code>db = connect.mydb
+                        collection = db.mycol
+                        collection.insert_one(document1)
+                    </code>
+                </pre>
+            </li>
+        </ul>
+    </body>
+</html>
