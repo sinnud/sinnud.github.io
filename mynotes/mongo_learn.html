@@ -29,6 +29,38 @@
                   <th>rust?</th>
                 </tr>
                 <tr>
+                  <td>Load JSON array</td>
+                  <td><pre><code> mongoimport --db mydb --collection mycol /full/path/my.JSONarray --jsonArray </code></pre></td>
+                  <td></td>
+                  <td>
+                      <pre>
+                          <code>
+def jsonarray_import(raw_path, db_url, db_port, db_name, coll_name):
+    """ Imports JSON array data file raw_path with full path to a mongo collection
+    returns: count of the documents in the new collection
+    """
+    with open(raw_path, 'r') as f:
+        buff = f.read()
+    payload = json.loads(buff)
+    client = MongoClient(db_url, db_port)
+    db = client[db_name]
+    coll = db[coll_name]
+    coll.remove()
+    coll.insert(payload)
+    return coll.count()
+                          </code>
+                      </pre>
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>append one collection to another</td>
+                  <td><code>db.this_col.aggregate([{"$merge" : {"into" : "appended_col", "on" : "_id"}}])</code></td>
+                  <td><code>insert into appended_tbl select * from this_tbl</code></td>
+                  <td>pipeline = [{"$merge" : {"into" : "appended_col", "on" : "_id"}}]; this_col.aggregate(pipeline)</td>
+                  <td></td>
+                </tr>
+                <tr>
                   <td>Frequency based on fields</td>
                   <td><code> db.txn.aggregate([{$group : {_id : "$root_field.nested_fld.target_fld", num_txn : {$sum : 1}}}]) </code></td>
                   <td><code>select target_fld, count(*) as num_txn from schema.tbl group by 1</code></td>
@@ -52,25 +84,39 @@
                 <tr>
                   <td>check key field duplication</td>
                   <td><pre><code>pipeline=[
-                    {"$group" :
-                        {"_id" :
-                            {"fld1" : "$root_field.nested_fld.target_fld1",
-                             "fld2" : {"$substr": ["$root_field.nested_fld.target_fld2", 0,10]},
-                             "fld3" : "$root_field.nested_fld.target_fld3",
-                             "fld4" : "$root_field.nested_fld.target_fld4",
-                            },
-                         "count" : {"$sum" : 1}
-                        }
-                    },
-                    {"$match": { 
-                        "count": {"$gt": 1}
-                        }
-                    },
-                    ]
-                    db.txn.aggregate(pipeline)
+    {"$group" :
+        {"_id" :
+            {"fld1" : "$root_field.nested_fld.target_fld1",
+             "fld2" : {"$substr": ["$root_field.nested_fld.target_fld2", 0,10]},
+             "fld3" : "$root_field.nested_fld.target_fld3",
+             "fld4" : "$root_field.nested_fld.target_fld4",
+            },
+         "count" : {"$sum" : 1}
+        }
+    },
+    {"$match": { 
+        "count": {"$gt": 1}
+        }
+    },
+    ]
+db.txn.aggregate(pipeline)
                   </code></pre></td>
                   <td><code>select fld1, fld2, fld3, fld4, count(*) from schema.tbl group by 1,2,3,4 having count(*)>1</code></td>
                   <td><code>mycol.aggregate(pipeline)</code></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>get subset of documentation: one to one</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>get subset of documentation: one to multiple</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                 </tr>
               </table>

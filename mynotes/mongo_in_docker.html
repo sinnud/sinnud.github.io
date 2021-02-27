@@ -5,6 +5,21 @@
     </head><meta charset="utf-8">
     <body>
         back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+        <ul> February 27, 2021:
+            <li>import csv file into mongodb: <pre>
+                <code>
+mongoimport --host aws-us-west-2-portal.0.dblayer.com --port 99999 --db banks --collection list --ssl --sslAllowInvalidCertificates -u user -p mypass --type csv --headerline --file banklist.csv 
+                </code></pre>
+            </li>
+            <li>import JSON file into mongodb: 
+                <pre><code>mongoimport --db dbName --collection collectionName fileName.json</code>
+                </pre>
+                If JSON file is too big, need to change it to JSONarray, like
+                <pre><code>mongoimport --db dbName --collection collectionName fileName.jsonarray --jsonArray</code>
+                </pre>
+            </li>
+        </ul>
+            <hr>
         2021年2月24日：(February 24, 2021)
         <ul>
             <li>Get mongo from docker:
