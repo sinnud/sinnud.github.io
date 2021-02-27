@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Mongo learn plan</title>
+        <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        th {
+          text-align: left;
+        }
+        table {
+          border-spacing: 5px;
+        }
+        </style>
+    </head><meta charset="utf-8">
+    <body>
+        back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+        <hr>
+        <ul> February 27, 2021.<p>
+            Looks python pipeline syntax with extra double quotation also works for Mongo directly.
+            <table style="width:100%">
+                <tr>
+                  <th>Purpose</th>
+                  <th>Mongo</th>
+                  <th>SQL</th>
+                  <th>python: pymongo</th>
+                  <th>rust?</th>
+                </tr>
+                <tr>
+                  <td>Frequency based on fields</td>
+                  <td><code> db.txn.aggregate([{$group : {_id : "$root_field.nested_fld.target_fld", num_txn : {$sum : 1}}}]) </code></td>
+                  <td><code>select target_fld, count(*) as num_txn from schema.tbl group by 1</code></td>
+                  <td><code>pipeline = [{"$group" : {"_id" : "$root_field.nested_fld.target_fld", "num_txn" : {"$sum" : 1}}}]; rst=list(col.aggregate(pipeline))</code></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><code> db.txn.aggregate([{$group : {_id : "$root_field.nested_fld.target_fld", num_txn : {$sum : 1}}}, {$out: "freq_target_fld"}]) </code></td>
+                  <td><code>create table freq_target_fld as select target_fld, count(*) as num_txn from schema.tbl group by 1</code></td>
+                  <td><code>pipeline = [{"$group" : {"_id" : "$root_field.nested_fld.target_fld", "num_txn" : {"$sum" : 1}}}, {"$out": "freq_target_fld"}]; col.aggregate(pipeline)</code></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>check duplication</td>
+                  <td>NA?</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>check key field duplication</td>
+                  <td><pre><code>pipeline=[
+                    {"$group" :
+                        {"_id" :
+                            {"fld1" : "$root_field.nested_fld.target_fld1",
+                             "fld2" : {"$substr": ["$root_field.nested_fld.target_fld2", 0,10]},
+                             "fld3" : "$root_field.nested_fld.target_fld3",
+                             "fld4" : "$root_field.nested_fld.target_fld4",
+                            },
+                         "count" : {"$sum" : 1}
+                        }
+                    },
+                    {"$match": { 
+                        "count": {"$gt": 1}
+                        }
+                    },
+                    ]
+                    db.txn.aggregate(pipeline)
+                  </code></pre></td>
+                  <td><code>select fld1, fld2, fld3, fld4, count(*) from schema.tbl group by 1,2,3,4 having count(*)>1</code></td>
+                  <td><code>mycol.aggregate(pipeline)</code></td>
+                  <td></td>
+                </tr>
+              </table>
+        </ul>
+    </body>
+</html>
