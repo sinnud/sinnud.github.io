@@ -18,6 +18,32 @@
     <body>
         back to <a href="../index.html">Luke Du's ugly page</a>.<p>
         <hr>
+        <ul>
+            February 28, 2021.<p></p>
+            Aggregation pipelines for:
+            <li>subset of whole document in collection (like get several rows in SQL DB) <code>db.tbl.aggregate(pipeline)</code>:
+                <pre>
+                    <code>pipeline = [{$match: {"root_field.nested_fld.nested_fld.target_flg" : target_value}}, {$out: "sam_raw"}]
+                    </code>
+                </pre>
+                This like SQL query:
+                <pre>
+                    <code>create table sam_raw as select * from tbl where target_flg=target_value
+                    </code>
+                </pre>
+            </li>
+
+        </ul>
+        <ul>
+            Mongodb update collection to add field:
+            <li>
+                Use mongo command <code>db.mycol.update({}, {"$set": {"new_filed" : "new value"}}, {"upsert":"false", "multi" : "true"})</code>
+            </li>
+            <li>
+                Use pymongo: <code>col.update_many({}, {"$set": {"new_filed" : "new value"}}, upsert = False)</code>
+            </li>
+        </ul>
+        <hr>
         <ul> February 27, 2021.<p>
             Looks python pipeline syntax with extra double quotation also works for Mongo directly.
             <table style="width:100%">
