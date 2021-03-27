@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["main","main function executable program start from.call functions defined in other file (mod), imported using `mod [mod_name]`."]],"mod":[["collatz","collatz.rs : test for the Collatz conjecture"]]});
