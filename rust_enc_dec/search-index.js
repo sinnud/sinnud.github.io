@@ -1,0 +1,4 @@
+var searchIndex = JSON.parse('{\
+"rustbook":{"doc":"","i":[[0,"encrypt_decrypt","rustbook","encrypt_decrypt.rs : test for the XOR random encryption …",null,null],[5,"main","rustbook::encrypt_decrypt","encrypt decrypt examplecode from webCode from web can not …",null,[[]]],[5,"combine_decrypt","","decryptionarguments: input two file names and output file …",null,[[["string",3]]]],[5,"split","","decryptionarguments: input file nameGet contents of the …",null,[[["string",3]]]],[5,"xor","","XORFor given two strings with same lengthXOR each paired …",null,[[],["string",3]]],[5,"main","rustbook","main function executable program start from.call …",null,[[]]]],"p":[]}\
+}');
+addSearchOptions(searchIndex);initSearch(searchIndex);

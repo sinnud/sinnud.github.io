@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/collatz.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>collatz.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rustbook/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">/*! collatz.rs : test for the Collatz conjecture
+ * HISTORY: The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined as follows: 
+ * start with any positive integer n. Then each term is obtained from the previous term as follows: 
+ * if the previous term is even, the next term is one half of the previous term. 
+ * If the previous term is odd, the next term is 3 times the previous term plus 1. 
+ * The conjecture is that no matter what value of n, the sequence will always reach 1.
+ * The conjecture is named after Lothar Collatz, who introduced the idea in 1937, two years after receiving his doctorate.
+ * 
+ * See source code on [GitHub](https://github.com/sinnud/rustbook/tree/collatz)
+ */</span>
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">env</span>;
+
+<span class="doccomment">/** # Collatz example
+ * code from [web](https://aml3.github.io/RustTutorial/html/01.html)
+ * Get number from stdin
+ * Call function `collatz` to
+ * Compute Collatz steps for this number
+ */</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">args</span>().<span class="ident">collect</span>();
+
+    <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">2</span> {
+        <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Error: Please provide a number as argument.&quot;</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">let</span> <span class="ident">i</span> : <span class="ident">u128</span> <span class="op">=</span> <span class="ident">args</span>[<span class="number">1</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">expect</span>(<span class="string">&quot;Please input integer.&quot;</span>);
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{:?} has {:?} Collatz steps&quot;</span>, <span class="ident">i</span>, <span class="ident">collatz</span>(<span class="ident">i</span>));
+}
+
+<span class="doccomment">/** # Collatz function
+ * code from [web](https://aml3.github.io/RustTutorial/html/01.html)
+ * called by function `main` and `reverse_collatz`
+ * Recursively compute Collatz steps
+ */</span>
+<span class="kw">fn</span> <span class="ident">collatz</span>(<span class="ident">n</span>: <span class="ident">u128</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> { <span class="kw">return</span> <span class="number">0</span>; }
+    <span class="kw">match</span> <span class="ident">n</span> <span class="op">%</span> <span class="number">2</span> {
+        <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> { <span class="number">1</span> <span class="op">+</span> <span class="ident">collatz</span>(<span class="ident">n</span><span class="op">/</span><span class="number">2</span>) }
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> { <span class="number">1</span> <span class="op">+</span> <span class="ident">collatz</span>(<span class="ident">n</span><span class="kw-2">*</span><span class="number">3</span><span class="op">+</span><span class="number">1</span>) }
+    }
+}
+
+<span class="doccomment">/** # Collatz : reverse problem
+ * Given Collatz steps
+ * Compute least number with exactly this Collatz steps
+ * Just enumerate integers start from 1
+ * Call function `collatz` each time
+ * May have quicker algorithm
+ */</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reverse_collatz</span>() {
+    <span class="kw">let</span> <span class="ident">max_default</span> : <span class="ident">u128</span> <span class="op">=</span> <span class="number">100000000</span>;
+    <span class="kw">let</span> <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">args</span>().<span class="ident">collect</span>();
+
+    <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">2</span> {
+        <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Error: Please provide a number as argument.&quot;</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">let</span> <span class="ident">i</span> : <span class="ident">u32</span> <span class="op">=</span> <span class="ident">args</span>[<span class="number">1</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">expect</span>(<span class="string">&quot;Please input integer...&quot;</span>);
+    <span class="kw">let</span> <span class="ident">max</span> : <span class="ident">u128</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">3</span> {<span class="ident">max_default</span>} 
+    <span class="kw">else</span> {<span class="ident">args</span>[<span class="number">2</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">expect</span>(<span class="string">&quot;Please input integer for max!.&quot;</span>)};
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">n</span> : <span class="ident">u128</span> <span class="op">=</span> <span class="number">1</span>;
+
+    <span class="comment">// Loop while `n` is less than given number</span>
+    <span class="kw">while</span> <span class="ident">n</span> <span class="op">&lt;</span> <span class="ident">max</span> {
+        <span class="kw">if</span> <span class="ident">collatz</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">i</span> {
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Found {:?} as the first integer with exact {:?} Collatz steps&quot;</span>, <span class="ident">n</span>, <span class="ident">i</span>);
+            <span class="kw">return</span>;
+        } 
+        <span class="comment">// Increment counter</span>
+        <span class="ident">n</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+    }
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;The max number {} exceed but didn&#39;t find answer.&quot;</span>, <span class="ident">max</span>);
+}
+<span class="comment">/* // u32 is not large enough for collatz problem
+pub fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    if args.len() &lt; 2 {
+        println!(&quot;Error: Please provide a number as argument.&quot;);
+        return;
+    }
+
+    let i : u32 = args[1].parse().ok().expect(&quot;Please input integer.&quot;);
+    println!(&quot;{:?} has {:?} Collatz steps&quot;, i, collatz(i));
+}
+
+fn collatz(n: u32) -&gt; u32 {
+    if n == 1 { return 0; }
+    match n % 2 {
+        0 =&gt; { 1 + collatz(n/2) }
+        _ =&gt; { 1 + collatz(n*3+1) }
+    }
+}
+*/</span>
+
+<span class="comment">/*
+The longest progression for any initial starting number
+
+less than 10 is 9, which has 19 steps,
+less than 100 is 97, which has 118 steps,
+less than 1000 is 871, which has 178 steps,
+less than 104 is 6171, which has 261 steps,
+less than 105 is 77031, which has 350 steps,
+less than 106 is 837799, which has 524 steps,
+less than 107 is 8400511, which has 685 steps,
+less than 108 is 63728127, which has 949 steps,
+less than 109 is 670617279, which has 986 steps,
+less than 1010 is 9780657630, which has 1132 steps,[11]
+less than 1011 is 75128138247, which has 1228 steps,
+less than 1012 is 989345275647, which has 1348 steps,
+less than 1013 is 7887663552367, which has 1563 steps,
+less than 1014 is 80867137596217, which has 1662 steps,
+less than 1015 is 942488749153153, which has 1862 steps,
+less than 1016 is 7579309213675935, which has 1958 steps,
+less than 1017 is 93571393692802302, which has 2091 steps and
+less than 1018 is 931386509544713451, which has 2283 steps.[12]
+
+Final Exercises:
+To finish off this section, we have a small programming problem for you to solve. 
+Starting with the above code (also available in a file here ), make a program that 
+takes as command-line input a single number, representing a number of Collatz steps 
+(steps required to reach 1 by following the Collatz procedure), and computes the 
+lowest number (starting from 1) which requires this number of Collatz steps. 
+For example, if the number input was 949, your program should output 63,728,127; 
+similarly, if you input 1132, it should output 9,780,657,630 as the lowest number 
+requiring 1132 Collatz steps. Since these are fairly large numbers, and it might 
+take your code a very long time to reach them (unless you use a more advanced 
+technique, such as in some manner memoizing previous results and efficiently 
+checking to see if you&#39;ve already found the number of steps remaining from a given 
+number - but I digress) you can use the following smaller test cases: For an input 
+of 6, your code should output 10. For an input of 45, it should output 361. Finally, 
+for an input of 260, it should print 18514. Bonus points if you can do it using each 
+type of loop in Rust, as well as if you can do it recursively. N.B.: Trying to call 
+collatz(0) will result in a stack overflow, as the Collatz sequence is only defined 
+for positive integers.
+*/</span></pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "rustbook";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
