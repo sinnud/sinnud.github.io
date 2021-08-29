@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MX Linux installation notes</title>
+  </head><meta charset="utf-8">
+  <body>
+    back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+    <hr>
+    Install MX Linux, then need to do the following:
+    <ul>
+      <li><b>sshd</b> <code>sudo apt install openssh-server</code> Then check with <code>ssh user@localhost</code></li>
+      <li><b>xrdp with sound</b>
+        <ol><li>Install basic packages: <code>sudo apt install xorgxrdp xrdp</code></li>
+            <li>Service operation: <code>sudo service xrdp restart[or stop/start]</code></li>
+            <li>For some reason virtualbox popup, need to fix: <code>sudo apt purge virtualbox*</code></li>
+            <li>For sound, download: <code>wget http://mxrepo.com/mx/testrepo/pool/test/p/pulseaudio-module-xrdp/pulseaudio-module-xrdp_0.4-0mx19_amd64.deb</code> and install <code>sudo dpkg -i Downloads/pulseaudio-module-xrdp_0.4-0mx19_amd64.deb</code></li>
+        </ol>
+      </li>
+      <li>
+        <b>docker</b>
+        <ol>
+          <li><code>wget -O docker.gpg https://download.docker.com/linux/debian/gpg</code></li>
+          <li><code>sudo apt-key add docker.gpg</code></li>
+          <li><code>echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" | sudo tee /etc/apt/sources.list.d/docker.list</code></li>
+          <li><code>sudo apt update</code></li>
+          <li><code>sudo apt install docker-ce</code></li>
+          <li><code>sudo usermod -a -G docker user</code></li>
+        </ol>
+      </li>
+      <li><b>fcitx</b> follow <a href="https://mxlinux.org/wiki/other/chinese-simplified-input/">Wiki</a></li>
+    </ul>
+  </body>
+</html>
