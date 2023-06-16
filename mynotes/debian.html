@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Debian installation notes</title>
+  </head><meta charset="utf-8">
+  <body>
+    back to <a href="../index.html">Luke Du's ugly page</a>.<p>
+    <hr>
+    Install Debian Linux under Oracle VM virtual box 7.0, then need to do the following:
+    <ul>
+      <li> Use <b>net-inst</b> with <b>ssh</b> server and basic packages without X installed.</li>
+      <li> Install net-tools <code>apt install net-tools</code> such that we will have <b>ifconfig</b> to see VM IP address.</li>
+      <li> Install sudo <code>apt install sudo</code> then set existing use to it: <code>usermod -aG sudo [user]</code>.</li>
+      <li><b>VBoxLinuxAddtion</b>
+        <ol><li>Install linux header: <code>sudo apt install linux-headers-$(uname -r)</code>.</li>
+        <li>Mount CDROM: <code>mount /media/cdrom</code>.</li>
+        <li>Install Addition: <code>sh VBoxLinuxAttions.run</code>. </li></ol>
+        </li>
+      <li><b>FVWM, Conky, and Xrdp</b>
+        <ol><li>Install basic packages: <code>sudo apt install fvwm conky xrdp</code>.</li>
+            <li>For sound through xrdp, download: 
+              <code>wget http://mxrepo.com/mx/testrepo/pool/test/p/pulseaudio-module-xrdp/pulseaudio-module-xrdp_0.4-0mx19_amd64.deb</code>
+               and install 
+               <code>sudo dpkg -i Downloads/pulseaudio-module-xrdp_0.4-0mx19_amd64.deb</code>
+              </li>
+            <li>FVWM with conky autorun:
+              <ol>Get FVWM configuration file from system: <code>cp /usr/share/fvwm2/default-config/config ~/.fvwm</code>.</ol>
+              <ol>Edit <i>~/.fvwm/config</i> file add: <code>+ I Exec exec conky</code>.</ol>
+              <ol>Get Conky configuration file from system: <code>cp /usr/share/doc/conky-std/conky.conf ~/.conkyrc</code>.</ol>
+              <ol>Edit <i>~/.conkyrc</i> file add IP address as example: <code>${color grey}Networking: ${color red} ${exec hostname -I} $color</code>.</ol>
+	      <ol>Sample [.conkyrc](sample_conf/dotconkyrc)</ol>
+            </li>
+        </ol>
+      </li>
+      <li><b>Chinese</b> terminal and inputs:
+        <ol>
+          <li>RXVT terminal: <code>apt install rxvt-unicode</code>.</li>
+          <li>Create <i>~/.Xresources</i> file add configuration for RXVT: <code>URxvt*font: xft:Monospace:size=12</code>. 
+            Use this configuration without log-off/login: <code>xrdb -merge ~/.Xresources</code>.</li>
+          <li>Install Chinese fonts: <code>apt install fonts-arphic-ukai fonts-arphic-uming fonts-wqy-zenhei</code>.</li>
+          <li>Install Chinese input method: <code>apt install fcitx</code>.</li>
+        </ol>
+      </li>
+      <li><b>MultiMedia</b>:
+        <ol>
+          <li>Install them: <code>apt install chromium dolphin mpv gwenview</code>.</li>
+        </ol>
+      </li>
+      <li><b>Editor</b>:
+        <ol>
+          <li>Install <b>VIM</b> and <b>Emacs</b>: <code>apt install vim emacs</code>.</li>
+          <li>Download <b>VS code</b> and install it: <code>dpkg -i Downloads/code-[version].deb</code></li>
+        </ol>
+      </li>
+      <li><b>Samba</b>:
+        <ol>
+          <li>Install driver: <code>apt install cifc-utils</code>.</li>
+          <li>Create mounting points: <code>mkdir /mnt/data</code> as example.</li>
+          <li>Edit <i>/etc/fstab</i> to add line like 
+            <code>//wdmycloud/data /mnt/data cifs guest,uid=1000,gid=1000,file_mode=0660,dir_mode=0770,iocharset=utf8 0 0</code>.
+            Here <i>uid</i> and <i>gid</i> with default 1000 for the first user and group. The <i>file_mode</i> and
+            <i>dir_mode</i> is setting for writable. The <i>guest</i> option is used if Samba allow guest access.
+          </li>
+          <li>With configuration under <i>/etc/fstab</i> we can mount manually by <code>mount /mnt/data</code> or un-mount it
+            <code>umount /mnt/data</code>, respectively.
+          </li>
+        </ol>
+      </li>
+      <li> <b>Mini Conda</b>:
+	<ol> Since <b>Anaconda</b> requires 3GB space, we like to install <b>miniconda</b> instead.
+	  <li> Download <a href="https://docs.conda.io/en/latest/miniconda.html"><b>Mini Conda</b></a>.
+	  </li>
+	  <li>Install it: <code>sudo sh Downloads/Miniconda3-latest-Linux-x86_64.sh</code> and configure to under <i>/opt</i></li>
+	  <li>Initialize it: <code>/opt/miniconda3/bin/conda init</code> to set <i>base</i> environment under <i>~/.bashrc</i> file.
+	    The next time when you start with <i>bash</i>, we will have this environment.</li>
+	</ol>
+      </li>
+    </ul>
+  </body>
+</html>
