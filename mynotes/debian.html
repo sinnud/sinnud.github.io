@@ -6,6 +6,20 @@
   <body>
     back to <a href="../index.html">Luke Du's ugly page</a>.<p>
     <hr>
+    After installation, found to add more space.<p>
+    <ul>
+      <li> Use <code>fdisk -l</code> to see the extra hard disk. Interesting that original hard drive is <code>/dev/sdb</code> while the new hard drive is <code>/dev/sda</code>.</li>
+      <li> Create partition <code>cfdisk /dev/sda</code> to create <code>/dev/sda1</code>.</li>
+      <li> Format the new disk: <code>mkfs.ext4 /dev/sda1</code>.</li>
+      <li> Mount it to <code>/disk_k8s</code>: <code>mkdir /disk_k8s; mount -t ext4 /dev/sda1 /disk_k8s</code>.</li>
+      <li> Use <code>blkid /dev/sda1</code> to get this disk's UUID and use it in <code>/etc/fstab</code> file.</li>
+    </ul>
+    Now install docker. <p>
+    <ul>
+      <li> Create <code>/disk_k8s/lib/docker</code> and <code>/disk_k8s/lib/containerd</code> and soft link to <code>/var/lib/docker</code> and <code>/var/lib/containerd</code> respectively.</li>
+      <li> Just follow the <a href="https://docs.docker.com/engine/install/debian/">docker doc</a> to install docker</li>
+    </ul>
+    <hr>
     Install Debian Linux under Oracle VM virtual box 7.0, then need to do the following:
     <ul>
       <li> Use <b>net-inst</b> with <b>ssh</b> server and basic packages without X installed.</li>
@@ -45,6 +59,7 @@
       <li><b>MultiMedia</b>:
         <ol>
           <li>Install them: <code>apt install chromium dolphin mpv gwenview</code>.</li>
+          <li>Dolphin without folder icon: <code>sudo apt install oxygen-icon-theme</code>.</li>
         </ol>
       </li>
       <li><b>Editor</b>:
