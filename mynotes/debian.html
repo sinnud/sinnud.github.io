@@ -18,6 +18,23 @@
     <ul>
       <li> Create <code>/disk_k8s/lib/docker</code> and <code>/disk_k8s/lib/containerd</code> and soft link to <code>/var/lib/docker</code> and <code>/var/lib/containerd</code> respectively.</li>
       <li> Just follow the <a href="https://docs.docker.com/engine/install/debian/">docker doc</a> to install docker</li>
+      <li> The above approach may be too old? do not work, but <a href="https://stackoverflow.com/questions/75309940/how-to-resolve-unmet-dependencies-between-containerd-and-runc">stach overflow</a>
+        provided solution. We need to <code>sudo systemctl start docker</code> to start docker service, and <code>sudo build . -t [image_name]</code> to build image.
+      </li> 
+    </ul>
+    Now <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">Kubernetes</a>.
+    <ul>
+      <li> Remove swap permanantly: comment out swap line in <code>/etc/fstab</code> and reboot. To check it: <code>free -h</code> to see swap is zero.</li>
+      <li> Check MAC address unique: <code>ifconfig -a</code>.</li>
+      <li> Check product_uuid unique: <code>sudo cat /sys/class/dmi/id/product_uuid</code>.</li>
+      <li> Install <a href="https://github.com/Mirantis/cri-dockerd">container runtime</a>.</li>
+        <ul> under <a href="https://github.com/Mirantis/cri-dockerd/releases">cri-dockerd release list</a>
+          The package only exists for Buster 10, Bullseye 11, while I have Bookworm 12. Should I downgrade?
+          <li> Download Bullseye one: https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.3/cri-dockerd_0.3.3.3-0.debian-bullseye_amd64.deb</li>
+          <li> Install: <code>sudo dpkg -i ./cri-dockerd_0.3.3.3-0.debian-bullseye_amd64.deb</code></li>
+          <li> Continue using this version to see issues later.</li>
+        </ul>
+      </li>
     </ul>
     <hr>
     Install Debian Linux under Oracle VM virtual box 7.0, then need to do the following:
@@ -89,6 +106,7 @@
 	  <li>Install it: <code>sudo sh Downloads/Miniconda3-latest-Linux-x86_64.sh</code> and configure to under <i>/opt</i></li>
 	  <li>Initialize it: <code>/opt/miniconda3/bin/conda init</code> to set <i>base</i> environment under <i>~/.bashrc</i> file.
 	    The next time when you start with <i>bash</i>, we will have this environment.</li>
+      <li> Resource: <a href="https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf">Conda cheat sheet</a>.</li>
 	</ol>
       </li>
       <li><b>Chinese Input in Emacs</b>
