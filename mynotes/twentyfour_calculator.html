@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24-Point Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-section {
+            margin-bottom: 30px;
+        }
+        .number-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        input[type="number"] {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="../index.html" style="color: #666; text-decoration: none;">← Back to Home</a>
+        </div>
+        <h1>24-Point Calculator</h1>
+        <div style="background-color: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; color: #495057;">
+            <h3 style="margin-top: 0;">How to Play:</h3>
+            <p>• Use exactly 4 numbers (1-13) to create an expression that equals 24</p>
+            <p>• You can use +, -, ×, ÷ operations</p>
+            <p>• Each number must be used exactly once</p>
+            <p>• Parentheses are allowed to change order of operations</p>
+        </div>
+        <p style="text-align: center; color: #666;">Enter 4 numbers (1-13) and find an expression that equals 24!</p>
+        
+        <div class="input-section">
+            <div class="number-inputs">
+                <input type="number" id="num1" min="1" max="13" placeholder="1">
+                <input type="number" id="num2" min="1" max="13" placeholder="2">
+                <input type="number" id="num3" min="1" max="13" placeholder="3">
+                <input type="number" id="num4" min="1" max="13" placeholder="4">
+            </div>
+            <button onclick="calculate24()" id="calculateBtn">Calculate</button>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const TARGET_SCORE = 24;
+        
+        const ops = [
+            ['+', (a, b) => a + b],
+            ['-', (a, b) => a - b],
+            ['*', (a, b) => a * b],
+            ['/', (a, b) => a / b]
+        ];
+        
+        function validDiv(x, y) {
+            return y !== 0 && x % y === 0;
+        }
+        
+        function permutations(arr) {
+            if (arr.length <= 1) return [arr];
+            const result = [];
+            for (let i = 0; i < arr.length; i++) {
+                const current = arr[i];
+                const remaining = arr.slice(0, i).concat(arr.slice(i + 1));
+                const perms = permutations(remaining);
+                for (let perm of perms) {
+                    result.push([current].concat(perm));
+                }
+            }
+            return result;
+        }
+        
+        function cartesianProduct(arrays) {
+            return arrays.reduce((acc, curr) => 
+                acc.flatMap(x => curr.map(y => x.concat([y]))), [[]]
+            );
+        }
+        
+        function tryAllExpressions(nums) {
+            const numPerms = permutations(nums);
+            const opsCombo = cartesianProduct([ops, ops, ops]);
+            
+            for (let numPerm of numPerms) {
+                for (let opsSet of opsCombo) {
+                    const [a, b, c, d] = numPerm;
+                    const [op1, op2, op3] = opsSet;
+                    
+                    // ((a op1 b) op2 c) op3 d
+                    try {
+                        const first = op1[1](a, b);
+                        if (op1[0] === '/' && !validDiv(a, b)) continue;
+                        const second = op2[1](first, c);
+                        if (op2[0] === '/' && !validDiv(first, c)) continue;
+                        const result = op3[1](second, d);
+                        if (op3[0] === '/' && !validDiv(second, d)) continue;
+                        if (Math.abs(result - TARGET_SCORE) < 1e-6) {
+                            return [true, `((${a} ${op1[0]} ${b}) ${op2[0]} ${c}) ${op3[0]} ${d}`];
+                        }
+                    } catch (e) { continue; }
+                    
+                    // (a op1 (b op2 c)) op3 d
+                    try {
+                        const first = op2[1](b, c);
+                        if (op2[0] === '/' && !validDiv(b, c)) continue;
+                        const second = op1[1](a, first);
+                        if (op1[0] === '/' && !validDiv(a, first)) continue;
+                        const result = op3[1](second, d);
+                        if (op3[0] === '/' && !validDiv(second, d)) continue;
+                        if (Math.abs(result - TARGET_SCORE) < 1e-6) {
+                            return [true, `(${a} ${op1[0]} (${b} ${op2[0]} ${c})) ${op3[0]} ${d}`];
+                        }
+                    } catch (e) { continue; }
+                    
+                    // a op1 ((b op2 c) op3 d)
+                    try {
+                        const first = op2[1](b, c);
+                        if (op2[0] === '/' && !validDiv(b, c)) continue;
+                        const second = op3[1](first, d);
+                        if (op3[0] === '/' && !validDiv(first, d)) continue;
+                        const result = op1[1](a, second);
+                        if (op1[0] === '/' && !validDiv(a, second)) continue;
+                        if (Math.abs(result - TARGET_SCORE) < 1e-6) {
+                            return [true, `${a} ${op1[0]} ((${b} ${op2[0]} ${c}) ${op3[0]} ${d})`];
+                        }
+                    } catch (e) { continue; }
+                    
+                    // a op1 (b op2 (c op3 d))
+                    try {
+                        const first = op3[1](c, d);
+                        if (op3[0] === '/' && !validDiv(c, d)) continue;
+                        const second = op2[1](b, first);
+                        if (op2[0] === '/' && !validDiv(b, first)) continue;
+                        const result = op1[1](a, second);
+                        if (op1[0] === '/' && !validDiv(a, second)) continue;
+                        if (Math.abs(result - TARGET_SCORE) < 1e-6) {
+                            return [true, `${a} ${op1[0]} (${b} ${op2[0]} (${c} ${op3[0]} ${d}))`];
+                        }
+                    } catch (e) { continue; }
+                    
+                    // (a op1 b) op2 (c op3 d)
+                    try {
+                        const first = op1[1](a, b);
+                        if (op1[0] === '/' && !validDiv(a, b)) continue;
+                        const second = op3[1](c, d);
+                        if (op3[0] === '/' && !validDiv(c, d)) continue;
+                        const result = op2[1](first, second);
+                        if (op2[0] === '/' && !validDiv(first, second)) continue;
+                        if (Math.abs(result - TARGET_SCORE) < 1e-6) {
+                            return [true, `(${a} ${op1[0]} ${b}) ${op2[0]} (${c} ${op3[0]} ${d})`];
+                        }
+                    } catch (e) { continue; }
+                }
+            }
+            return [false, "No solution found."];
+        }
+        
+        function calculate24() {
+            const num1 = parseInt(document.getElementById('num1').value);
+            const num2 = parseInt(document.getElementById('num2').value);
+            const num3 = parseInt(document.getElementById('num3').value);
+            const num4 = parseInt(document.getElementById('num4').value);
+            
+            const resultDiv = document.getElementById('result');
+            const calculateBtn = document.getElementById('calculateBtn');
+            
+            if (isNaN(num1) || isNaN(num2) || isNaN(num3) || isNaN(num4)) {
+                resultDiv.innerHTML = '<div class="error">Please enter all 4 numbers!</div>';
+                return;
+            }
+            
+            if (num1 < 1 || num1 > 13 || num2 < 1 || num2 > 13 || 
+                num3 < 1 || num3 > 13 || num4 < 1 || num4 > 13) {
+                resultDiv.innerHTML = '<div class="error">Numbers must be between 1 and 13!</div>';
+                return;
+            }
+            
+            calculateBtn.disabled = true;
+            calculateBtn.textContent = 'Calculating...';
+            resultDiv.innerHTML = '<div class="loading">Searching for solution...</div>';
+            
+            setTimeout(() => {
+                const [found, expression] = tryAllExpressions([num1, num2, num3, num4]);
+                
+                if (found) {
+                    resultDiv.innerHTML = `<div class="success">Solution found: ${expression} = 24</div>`;
+                } else {
+                    resultDiv.innerHTML = '<div class="error">No solution found for these numbers.</div>';
+                }
+                
+                calculateBtn.disabled = false;
+                calculateBtn.textContent = 'Calculate';
+            }, 100);
+        }
+        
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate24();
+            }
+        });
+        
+        document.getElementById('num1').addEventListener('input', function() {
+            document.getElementById('result').innerHTML = '';
+        });
+        document.getElementById('num2').addEventListener('input', function() {
+            document.getElementById('result').innerHTML = '';
+        });
+        document.getElementById('num3').addEventListener('input', function() {
+            document.getElementById('result').innerHTML = '';
+        });
+        document.getElementById('num4').addEventListener('input', function() {
+            document.getElementById('result').innerHTML = '';
+        });
+    </script>
+</body>
+</html>
