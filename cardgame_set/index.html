@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SET Card Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SET Card Game</h1>
+        <a href="../index.html" style="text-decoration: none; font-size: 18px;">← Back to main page</a>
+        
+        <div class="controls">
+            <button id="helpBtn" class="btn">Help</button>
+            <button id="giveUpBtn" class="btn">Give Up (3 left)</button>
+            <div class="score-info">
+                <span id="scoreLabel">Score: 0</span>
+                <span id="playedLabel">Played: 0</span>
+            </div>
+        </div>
+        
+        <div class="game-board">
+            <!-- Main 4 columns (12 cards) -->
+            <div class="card-grid" id="cardGrid">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+            
+            <!-- Selected cards display column -->
+            <div class="selected-cards">
+                <div class="selected-card" id="selected0"></div>
+                <div class="selected-card" id="selected1"></div>
+                <div class="selected-card" id="selected2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>SET Card Game Rules</h2>
+            <div class="help-content">
+                <h3>Operation Manual:</h3>
+                <ul>
+                    <li>Click cards to select them (up to 3)</li>
+                    <li>Click selected cards to unselect them</li>
+                    <li>After selecting 3 cards, they appear in the right column</li>
+                    <li>A popup shows if you found a valid SET or not</li>
+                </ul>
+                
+                <h3>SET Rules:</h3>
+                <p>A SET is 3 cards where each property is either:</p>
+                <ul>
+                    <li><strong>ALL THE SAME</strong> across the 3 cards, OR</li>
+                    <li><strong>ALL DIFFERENT</strong> across the 3 cards</li>
+                </ul>
+                
+                <h3>Properties:</h3>
+                <ul>
+                    <li><strong>Shape:</strong> Circle (○), Triangle (△), Square (□)</li>
+                    <li><strong>Color:</strong> Red, Green, Blue</li>
+                    <li><strong>Number:</strong> 1, 2, or 3 shapes</li>
+                    <li><strong>Shading:</strong> Outline, Striped, Filled</li>
+                </ul>
+                
+                <h3>Examples:</h3>
+                <p>✓ <strong>VALID SET:</strong> All same color, all different shapes, all same number</p>
+                <p>✓ <strong>VALID SET:</strong> All different colors, all same shape, all different numbers</p>
+                <p>✗ <strong>INVALID:</strong> 2 red cards + 1 blue card (not all same, not all different)</p>
+                
+                <h3>Scoring:</h3>
+                <p>+1 for correct SET, -1 for incorrect guess</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <h2 id="resultTitle">Game Result</h2>
+            <div id="resultMessage"></div>
+            <div class="modal-buttons">
+                <button id="continueBtn" class="btn btn-primary">Continue Playing</button>
+                <button id="quitBtn" class="btn">Quit Game</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
