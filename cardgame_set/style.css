@@ -435,6 +435,33 @@ h1 {
         width: 20px;
         height: 16px;
     }
+    
+    /* Mobile-specific modal styling */
+    .modal-content {
+        margin: 10px;
+        margin-left: 5px;
+        width: 60%;
+        max-width: 300px;
+        max-height: 70vh;
+        padding: 15px;
+        font-size: 12px;
+    }
+    
+    #resultMessage {
+        font-size: 11px;
+        padding: 10px;
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+    
+    .modal-buttons {
+        margin-top: 10px;
+    }
+    
+    .modal-buttons .btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
 }
 
 /* Mobile landscape - optimized for phone landscape */
@@ -528,21 +555,35 @@ h1 {
     }
     
     .modal-content {
-        margin: 2% auto;
-        padding: 15px;
-        width: 95%;
-        max-height: 90vh;
-        font-size: 14px;
+        margin: 5px;
+        margin-left: 3px;
+        padding: 12px;
+        width: 45%;
+        max-width: 280px;
+        max-height: 85vh;
+        font-size: 12px;
+    }
+    
+    #resultMessage {
+        font-size: 10px;
+        padding: 8px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    
+    .modal-buttons .btn {
+        padding: 5px 8px;
+        font-size: 9px;
     }
     
     .help-content h3 {
-        font-size: 16px;
-        margin: 10px 0 8px 0;
+        font-size: 14px;
+        margin: 8px 0 6px 0;
     }
     
     .help-content li, .help-content p {
-        font-size: 13px;
-        margin: 3px 0;
+        font-size: 11px;
+        margin: 2px 0;
     }
 }
 
@@ -562,5 +603,24 @@ h1 {
     .selected-card {
         width: 70px;
         height: 90px;
+    }
+    
+    /* Even smaller modal for very small screens */
+    .modal-content {
+        width: 55%;
+        max-width: 250px;
+        margin: 8px;
+        margin-left: 3px;
+        padding: 12px;
+    }
+    
+    #resultMessage {
+        font-size: 10px;
+        padding: 8px;
+    }
+    
+    .modal-buttons .btn {
+        padding: 4px 8px;
+        font-size: 9px;
     }
 }
